@@ -58,14 +58,12 @@
 
         #ticker-content {
             display: inline-block;
-            /* Animation duration will be set by JS */
-            animation: ticker-animation linear infinite;
+            /* Animation will be applied by JS */
         }
 
         .ticker-text {
             display: inline-block;
-            font-weight: bold; /* Added for bold style */
-            color: #ff0000; /* Added for red style */
+            font-weight: bold;
         }
 
         @keyframes ticker-animation {
@@ -88,7 +86,7 @@
         <input type="text" id="text-input" value="Disclaimer: I am not a SEBI registered investment advisor. The content on this channel is for educational and entertainment purposes only. It is not intended to be and does not constitute financial advice. The live trading shown is for demonstration purposes only. Trading involves risk, and you should not trade with money you cannot afford to lose. Before making any investment or trading decisions, you should consult with a qualified professional. All investment and trading decisions are your sole responsibility. Past performance is not indicative of future results.">
         
         <label for="font-size">Font Size (px):</label>
-        <input type="number" id="font-size" value="24">
+        <input type="number" id="font-size" value="30">
         
         <label for="text-color">Text Color:</label>
         <input type="color" id="text-color" value="#ff0000">
@@ -101,27 +99,27 @@
         <input type="number" id="ticker-y" value="0">
         
         <label for="ticker-width">Width (px):</label>
-        <input type="number" id="ticker-width" value="600">
+        <input type="number" id="ticker-width" value="1920">
         
         <label for="ticker-height">Height (px):</label>
         <input type="number" id="ticker-height" value="50">
 
         <label for="bg-color">Background Color:</label>
-        <input type="color" id="bg-color" value="#ffffff">
-        
+        <input type="color" id="bg-color" value="#000000">
+
         <label for="border-color">Border Color:</label>
         <input type="color" id="border-color" value="#000000">
 
         <label for="scroll-duration">Scroll Duration (s):</label>
-        <input type="number" id="scroll-duration" value="20" min="1">
+        <input type="number" id="scroll-duration" value="180" min="1">
 
         <button onclick="updateTicker()">Update Ticker</button>
     </div>
 
     <div id="ticker-container">
         <div id="ticker-content">
-            <span class="ticker-text"></span>
-            <span class="ticker-text"></span>
+            <span class="ticker-text">Your custom text here!</span>
+            <span class="ticker-text">Your custom text here!</span>
         </div>
     </div>
 
@@ -150,21 +148,22 @@
             tickerContainer.style.backgroundColor = bgColor;
             tickerContainer.style.borderColor = borderColor;
 
-            // Update ticker content animation duration
-            tickerContent.style.animationDuration = `${scrollDuration}s`;
-
             // Update ticker text content and styles
             tickerTexts.forEach(textSpan => {
                 textSpan.textContent = textInput + '\u00A0\u00A0\u00A0\u00A0'; // Adds some space between loops
                 textSpan.style.fontSize = `${fontSize}px`;
                 textSpan.style.color = textColor;
-                textSpan.style.fontWeight = 'bold'; // Ensure bold is applied
                 textSpan.style.lineHeight = `${tickerHeight}px`; // Vertically center text
             });
+
+            // To ensure the animation starts immediately, we remove and re-add it.
+            tickerContent.style.animation = 'none';
+            tickerContent.offsetWidth; // Trigger a reflow
+            tickerContent.style.animation = `ticker-animation linear infinite ${scrollDuration}s`;
         }
 
-        // Initial update on page load
-        window.onload = updateTicker;
+        // Start the ticker immediately by calling the function
+        updateTicker();
     </script>
 
 </body>
